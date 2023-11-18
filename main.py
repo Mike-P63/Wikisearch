@@ -1,17 +1,25 @@
 import requests
 
 S = requests.Session()
-URL = "https://en.wikipedia.org/w/api.php"
-PARAMS = {
-    "format": "json",
-    "list": "geosearch",
-    "gscoord": "37.7891838|-122.4033522",
-    "gslimit": "10",
-    "gsradius": "10000",
-    "action": "query"
-}
-R = S.get(url=URL, params=PARAMS)
-DATA = R.json()
-PLACES = DATA['query']['geosearch']
-for place in PLACES:
-    print(place['title'])
+
+def get_sites(lat, long, radius, limit=100):
+    URL = "https://en.wikipedia.org/w/api.php"
+    PARAMS = {
+        "format": "json",
+        "list": "geosearch",
+        "gscoord": f"{lat}|{long}",
+        "gslimit": f"{limit}",
+        "gsradius": f"{radius}",
+        "action": "query"
+    }
+    r = S.get(url=URL, params=PARAMS)
+    pages = r.json()['query']['geosearch']
+    sites = [i["title"] for i in pages]
+    return sites
+
+# print(get_sites("37.7891838", "-122.4033522", 100))
+
+def test_step1():
+    assert "One Montgomery Tower" in get_sites("37.7891838", "-122.4033522", 100), "Not found"
+
+test_step1()
