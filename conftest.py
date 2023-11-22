@@ -8,3 +8,11 @@ def coord1():
 @pytest.fixture()
 def text1():
     return "One Montgomery Tower"
+
+@pytest.fixture()
+def good_word():
+    return "table"
+
+@pytest.fixture()
+def bad_word():
+    return "tabbl"
